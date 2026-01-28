@@ -7,7 +7,14 @@
     "setup": "bash scripts/setup.sh",
     "install:ubuntu": "bash scripts/install-ubuntu.sh"
   },
-  "keywords": ["ai", "creative", "super-individual"],
+  "keywords": [
+    "ai",
+    "creative",
+    "super-individual"
+  ],
   "author": "JinV2",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.93.2"
+  }
 }

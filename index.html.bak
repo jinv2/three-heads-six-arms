@@ -287,4 +287,3 @@ window.generateQuote = commercial.generateQuote;
 window.createProposal = commercial.createProposal;
 window.showPayment = commercial.showPayment;
 </script>
-<button onclick="generate()">生成方案</button>
