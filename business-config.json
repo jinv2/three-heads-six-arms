@@ -1,0 +1,51 @@
+{
+  "company": {
+    "name": "三头六臂创世系统",
+    "legalName": "三头六臂科技有限公司",
+    "taxId": "91310101XXXXXX",
+    "bankAccount": "中国银行 XXX支行 1234 5678 9012",
+    "contact": {
+      "phone": "400-xxx-xxxx",
+      "email": "business@threeheads.com",
+      "address": "上海市浦东新区XXX路"
+    }
+  },
+  "pricing": {
+    "baseRate": 1000,
+    "minProject": 50000,
+    "maxProject": 500000,
+    "currency": "CNY",
+    "paymentTerms": ["50%预付", "30%中期", "20%交付"],
+    "vatRate": 0.06
+  },
+  "services": [
+    {
+      "name": "基础方案",
+      "price": "5-15万",
+      "delivery": "1个月",
+      "features": ["需求分析", "方案设计", "基础交付"]
+    },
+    {
+      "name": "专业方案", 
+      "price": "15-30万",
+      "delivery": "3个月",
+      "features": ["深度分析", "完整方案", "实施指导", "培训"]
+    },
+    {
+      "name": "企业方案",
+      "price": "30-100万",
+      "delivery": "6个月",
+      "features": ["战略规划", "完整实施", "团队建设", "长期支持"]
+    }
+  ],
+  "contract": {
+    "template": "contract-template.docx",
+    "clauses": [
+      "知识产权归属",
+      "保密协议", 
+      "交付标准",
+      "付款条款",
+      "违约责任"
+    ]
+  }
+}
