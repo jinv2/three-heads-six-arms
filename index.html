@@ -3,468 +3,797 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三头六臂创世系统</title>
+    <title>三头六臂创世系统 - 超级个体跨界赋能平台</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
             min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         h1 {
             text-align: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 10px;
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .subtitle {
             text-align: center;
             opacity: 0.9;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
         }
         textarea {
             width: 100%;
-            height: 100px;
-            padding: 15px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
+            height: 120px;
+            padding: 20px;
+            border: 2px solid rgba(0,219,222,0.3);
+            border-radius: 15px;
+            background: rgba(0,0,0,0.3);
             color: white;
             font-size: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             resize: vertical;
+            transition: all 0.3s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #00dbde;
+            box-shadow: 0 0 20px rgba(0,219,222,0.2);
         }
         textarea::placeholder {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.4);
         }
-        button {
-            background: white;
-            color: #667eea;
+        .generate-btn {
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 18px 50px;
             font-size: 18px;
+            font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            font-weight: bold;
             width: 100%;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            letter-spacing: 1px;
         }
-        button:hover {
-            transform: translateY(-2px);
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,219,222,0.3);
         }
         .results {
-            margin-top: 40px;
+            margin-top: 50px;
             display: none;
+            animation: fadeIn 0.5s ease;
         }
-        .card {
-            background: rgba(255,255,255,0.1);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-title {
+            color: #00dbde;
+            border-left: 4px solid #fc00ff;
+            padding-left: 15px;
+            margin: 30px 0 20px;
+        }
+        .analysis-card {
+            background: linear-gradient(145deg, rgba(0,219,222,0.1), rgba(252,0,255,0.05));
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .gene-card {
+            background: rgba(255,255,255,0.05);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin: 15px 0;
-            border-left: 4px solid white;
+            border-left: 4px solid #00dbde;
+            transition: all 0.3s;
         }
-        .card h3 {
-            margin-bottom: 10px;
-            color: #ffd700;
-        }
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        /* 新增样式 */
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.2rem;
+        .gene-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
         }
         .gene-tag {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 10px;
-            border-radius: 15px;
-            margin: 2px;
+            background: rgba(0,219,222,0.2);
+            color: #00dbde;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin: 5px 5px 5px 0;
             font-size: 0.85rem;
+            border: 1px solid rgba(0,219,222,0.3);
         }
         .arm-button {
-            background: rgba(255,255,255,0.15);
+            background: linear-gradient(90deg, #667eea, #764ba2);
             color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 15px;
-            margin: 5px;
-            border-radius: 20px;
+            border: none;
+            padding: 10px 25px;
+            margin: 8px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s;
+            display: inline-block;
         }
         .arm-button:hover {
-            background: rgba(255,255,255,0.3);
             transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+        .commercial-panel {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.05));
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+            border: 1px solid rgba(255,215,0,0.2);
+            display: none;
+        }
+        .pricing-card {
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: #00dbde;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+        }
+        .loading-dots:after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: ' .'; }
+            40% { content: ' ..'; }
+            60% { content: ' ...'; }
+            80%, 100% { content: ' ...'; }
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .status-badge {
+            display: inline-block;
+            background: rgba(0,255,127,0.2);
+            color: #00ff7f;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            border: 1px solid rgba(0,255,127,0.3);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🧬 三头六臂创世系统</h1>
-        <p class="subtitle">超级个体跨界创造平台 · 基于共生协议 v1.0</p>
+        <p class="subtitle">超级个体跨界赋能平台 · 基于共生协议 v2.0 <span class="status-badge">智能引擎已上线</span></p>
         
+        <!-- 输入区域 -->
         <div>
-            <textarea id="input" placeholder="描述您的专业能力，例如：我是一名传统书法家，擅长用笔墨表现气韵与意境..."></textarea>
-            <button onclick="generateWithAI()">🚀 生成跨界方案</button>
+            <textarea id="userInput" placeholder="请详细描述您的专业能力、经验或想解决的问题...
+            
+例如：
+• 我是一名悬疑小说作家，擅长制造悬念和反转
+• 我是独立音乐制作人，精通电子音乐编曲
+• 我从事品牌视觉设计，需要为传统行业创新
+• 我是戏剧导演，想要将舞台经验应用于商业培训"></textarea>
+            <button class="generate-btn" onclick="generateSmartPlan()">
+                🚀 生成智能跨界方案
+            </button>
         </div>
         
+        <!-- 结果展示区域 -->
         <div class="results" id="results">
-            <h2>🎯 您的三头六臂方案</h2>
+            <h2 class="section-title">🎯 智能分析报告</h2>
             
-            <div class="card">
-                <h3>📖 文学头 - 叙事构建</h3>
-                <p id="literature">正在连接智能基因库...</p>
+            <!-- 智能分析卡片 -->
+            <div class="analysis-card" id="analysisSection">
+                <h3>🧠 系统理解与分析</h3>
+                <div id="analysisContent">
+                    <p>正在分析您的专业背景与潜在需求...</p>
+                </div>
             </div>
             
-            <div class="card">
-                <h3>🎵 音乐头 - 节奏设计</h3>
-                <p id="music">正在分析节奏模式...</p>
+            <!-- 方法基因展示 -->
+            <h3 class="section-title">🔬 匹配的方法基因</h3>
+            <div id="genesSection">
+                <p>正在为您匹配高相关的方法论基因...</p>
             </div>
             
-            <div class="card">
-                <h3>🎬 影视头 - 视觉叙事</h3>
-                <p id="film">正在构建视觉框架...</p>
+            <!-- 三头六臂方案 -->
+            <h3 class="section-title">🎭 三头六臂赋能方案</h3>
+            <div class="analysis-card">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                    <div>
+                        <h4>📖 文学头</h4>
+                        <p id="literatureHead">正在构建叙事框架...</p>
+                    </div>
+                    <div>
+                        <h4>🎵 音乐头</h4>
+                        <p id="musicHead">正在设计节奏结构...</p>
+                    </div>
+                    <div>
+                        <h4>🎬 影视头</h4>
+                        <p id="filmHead">正在策划视觉表达...</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>🦾 六臂执行系统</h4>
+                    <div id="sixArmsExecution" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div class="arm-button" onclick="armFunction('diagnose')">诊断</div>
+                        <div class="arm-button" onclick="armFunction('graft')">嫁接</div>
+                        <div class="arm-button" onclick="armFunction('architect')">架构</div>
+                        <div class="arm-button" onclick="armFunction('material')">物料</div>
+                        <div class="arm-button" onclick="armFunction('monetize')">变现</div>
+                        <div class="arm-button" onclick="armFunction('collaborate')">协同</div>
+                    </div>
+                    <div id="executionDetails" style="margin-top: 20px;">
+                        <p>点击任一执行臂查看详细方案...</p>
+                    </div>
+                </div>
             </div>
             
-            <div class="card">
-                <h3>🦾 六臂执行体系</h3>
-                <p id="execution">正在生成执行方案...</p>
+            <!-- 商业化入口 -->
+            <div style="text-align: center; margin: 40px 0;">
+                <button class="generate-btn" style="width: auto; padding: 15px 40px;" onclick="showCommercialPanel()">
+                    💰 立即转化为商业项目
+                </button>
+            </div>
+        </div>
+        
+        <!-- 商业化面板 -->
+        <div class="commercial-panel" id="commercialPanel">
+            <h2 class="section-title">商业转化中心</h2>
+            
+            <!-- 定价方案 -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0;">
+                <div class="pricing-card">
+                    <h3>体验版</h3>
+                    <p style="font-size: 2rem; color: #00dbde;">¥299</p>
+                    <p>单次深度分析</p>
+                    <button class="arm-button" onclick="selectPlan('trial')">立即体验</button>
+                </div>
+                <div class="pricing-card" style="border: 2px solid #00dbde; transform: scale(1.05);">
+                    <h3>专业版</h3>
+                    <p style="font-size: 2.5rem; color: #fc00ff;">¥999</p>
+                    <p>月度无限生成</p>
+                    <button class="arm-button" style="background: linear-gradient(90deg, #00dbde, #fc00ff);" 
+                            onclick="selectPlan('pro')">
+                        订阅专业版
+                    </button>
+                </div>
+                <div class="pricing-card">
+                    <h3>企业版</h3>
+                    <p style="font-size: 2rem; color: #ffd700;">¥9,999</p>
+                    <p>年度合伙人</p>
+                    <button class="arm-button" onclick="selectPlan('enterprise')">定制咨询</button>
+                </div>
             </div>
             
-            <!-- 新增：云端基因展示区域 -->
-            <div class="card" id="genesContainer" style="display:none;">
-                <h3>🧠 智能匹配的方法基因</h3>
-                <div id="genesList"></div>
+            <!-- 商业工具 -->
+            <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px;">
+                <h3>商业工具箱</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0;">
+                    <button class="arm-button" onclick="generateQuote()">📄 生成报价单</button>
+                    <button class="arm-button" onclick="createProposal()">📋 创建客户提案</button>
+                    <button class="arm-button" onclick="showContract()">📑 合同模板</button>
+                    <button class="arm-button" onclick="calculateROI()">📊 ROI分析</button>
+                    <button class="arm-button" onclick="paymentOptions()">💳 支付设置</button>
+                </div>
+                <div id="commercialOutput" style="margin-top: 20px;"></div>
             </div>
         </div>
         
         <footer>
-            <p>© 2024 三头六臂创世系统 | 协议驱动 · 集体进化</p>
-            <p style="font-size: 0.8rem; margin-top: 5px;">GitHub: jinv2/three-heads-six-arms | 云端基因库已连接</p>
+            <p>© 2024 三头六臂创世系统 | 智能基因库 v2.0 | 协议驱动 · 集体进化</p>
+            <p style="font-size: 0.8rem; margin-top: 10px;">
+                GitHub: jinv2/three-heads-six-arms | 
+                <span id="apiStatus" style="color: #00ff7f;">云端智能引擎 ✓ 在线</span>
+            </p>
         </footer>
-    </div>
-    
-    <!-- 商业化模块 -->
-    <div id="commercialPanel" style="display:none; margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-        <h3>💰 商业化工具</h3>
-        
-        <div class="commercial-tools" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0;">
-            <button class="arm-button" onclick="generateQuote()">生成报价单</button>
-            <button class="arm-button" onclick="createProposal()">创建客户提案</button>
-            <button class="arm-button" onclick="showPayment()">设置支付方式</button>
-            <button class="arm-button" onclick="calculateROI()">ROI计算器</button>
-        </div>
-        
-        <div id="quoteResult" style="margin-top: 20px; display:none;">
-            <h4>报价单预览</h4>
-            <div id="quoteContent"></div>
-            <button class="arm-button" onclick="downloadQuote()">下载PDF</button>
-        </div>
     </div>
 
     <script>
-    // ==================== 核心API连接函数 ====================
-    async function searchMethodGenes(userInput, options = {}) {
+    // ==================== 全局状态与配置 ====================
+    let currentAnalysis = null;
+    let currentGenes = [];
+    
+    // ==================== 智能理解引擎调用 ====================
+    async function generateSmartPlan() {
+        const userInput = document.getElementById('userInput').value.trim();
+        if (!userInput) {
+            alert('请输入您的专业描述');
+            return;
+        }
+        
+        // 显示结果区域和加载状态
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('analysisContent').innerHTML = 
+            '<div class="loading"><span class="loading-dots">正在深度分析您的专业背景</span></div>';
+        document.getElementById('genesSection').innerHTML = 
+            '<p class="loading"><span class="loading-dots">匹配高相关方法基因</span></p>';
+        document.getElementById('literatureHead').textContent = '分析中...';
+        document.getElementById('musicHead').textContent = '分析中...';
+        document.getElementById('filmHead').textContent = '分析中...';
+        document.getElementById('executionDetails').innerHTML = '<p>等待分析结果...</p>';
+        
+        // 隐藏商业化面板
+        document.getElementById('commercialPanel').style.display = 'none';
+        
         try {
-            // 构建查询参数
-            const params = new URLSearchParams({ 
-                query: userInput,
-                ...(options.domain && { domain: options.domain }),
-                ...(options.tag && { tag: options.tag }),
-                limit: options.limit || 5
+            console.log('📡 调用智能理解引擎...');
+            
+            // 调用新的智能理解函数
+            const response = await fetch('/.netlify/functions/understand-and-match', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ userInput })
             });
             
-            // 调用云端Netlify Function
-            const response = await fetch(`/.netlify/functions/searchGenes?${params}`);
-            
             if (!response.ok) {
-                throw new Error(`API请求失败: ${response.status}`);
+                throw new Error(`API响应错误: ${response.status}`);
             }
             
             const result = await response.json();
+            console.log('✅ 收到智能分析结果:', result);
             
             if (!result.success) {
-                console.error('API返回错误:', result.error);
-                return [];
+                throw new Error(result.error || '分析失败');
             }
             
-            return result.data;
+            // 保存当前分析结果
+            currentAnalysis = result.analysis;
+            currentGenes = result.data;
+            
+            // 更新API状态显示
+            document.getElementById('apiStatus').innerHTML = 
+                `智能引擎 ✓ 已处理 ${result.analysis.intelligence_level} 分析`;
+            
+            // 显示智能分析过程
+            renderAnalysis(result);
+            
+            // 显示基因匹配结果
+            renderGenes(result);
+            
+            // 生成三头六臂方案
+            renderThreeHeadsSixArms(result);
+            
+            // 滚动到结果区域
+            document.getElementById('results').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
             
         } catch (error) {
-            console.error('搜索方法基因失败:', error);
-            return [];
+            console.error('❌ 生成失败:', error);
+            
+            // 降级到本地逻辑
+            document.getElementById('analysisContent').innerHTML = `
+                <div style="color: #ff6b6b;">
+                    <h4>⚠️ 智能引擎暂时不可用</h4>
+                    <p>使用本地专家系统为您生成方案...</p>
+                </div>
+            `;
+            
+            // 本地降级方案
+            generateLocalFallback(userInput);
+            
+            // 更新状态
+            document.getElementById('apiStatus').innerHTML = 
+                '智能引擎 ✗ 离线 | 使用本地模式';
+            document.getElementById('apiStatus').style.color = '#ff6b6b';
         }
     }
-
-    // ==================== 新版生成函数（连接云端） ====================
-    async function generateWithAI() {
-        const input = document.getElementById('input').value.trim();
-        if (!input) {
-            alert('请输入您的专业能力描述');
-            return;
-        }
+    
+    // ==================== 渲染智能分析 ====================
+    function renderAnalysis(result) {
+        const analysis = result.analysis;
         
-        // 显示加载状态
-        document.getElementById('results').style.display = 'block';
-        document.getElementById('literature').innerHTML = '<div class="loading">🔍 正在搜索方法基因库...</div>';
-        document.getElementById('music').innerHTML = '<div class="loading">🎵 分析节奏与情绪模式...</div>';
-        document.getElementById('film').innerHTML = '<div class="loading">🎬 构建视觉叙事框架...</div>';
-        document.getElementById('execution').innerHTML = '<div class="loading">🦾 生成六臂执行方案...</div>';
+        let analysisHTML = `
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <div>
+                    <h4 style="color: #00dbde;">📝 输入解析</h4>
+                    <p>"${analysis.user_input}"</p>
+                </div>
+                <div>
+                    <h4 style="color: #00dbde;">🧠 智能等级</h4>
+                    <p>${analysis.intelligence_level} (${analysis.query_method})</p>
+                </div>
+            </div>
+        `;
         
-        // 隐藏之前的基因展示
-        document.getElementById('genesContainer').style.display = 'none';
-        
-        // 1. 调用云端基因库
-        const methodGenes = await searchMethodGenes(input);
-        
-        if (methodGenes.length === 0) {
-            // 降级方案：使用本地逻辑
-            generateFallback(input);
-            return;
-        }
-        
-        // 2. 展示匹配到的基因
-        displayMatchedGenes(methodGenes);
-        
-        // 3. 基于基因生成三头六臂方案
-        generateThreeHeadsFromGenes(input, methodGenes);
-        
-        // 4. 显示商业化工具
-        setTimeout(() => {
-            showCommercialTools();
-        }, 500);
-        
-        // 滚动到结果
-        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // ==================== 展示匹配的基因 ====================
-    function displayMatchedGenes(genes) {
-        const genesList = document.getElementById('genesList');
-        genesList.innerHTML = '';
-        
-        genes.forEach(gene => {
-            const geneHtml = `
-                <div style="margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
-                    <strong style="color: #ffd700;">${gene.title}</strong>
-                    <p style="margin: 8px 0; font-size: 0.9rem;">${gene.description}</p>
-                    <div>
-                        <span style="opacity: 0.8;">来源: ${gene.origin_domain}</span>
-                        <div style="margin-top: 8px;">
-                            ${gene.tags.map(tag => `<span class="gene-tag">#${tag}</span>`).join('')}
-                        </div>
-                        <div style="margin-top: 10px;">
-                            <small>可应用于: ${gene.applicable_domains.join(', ')}</small>
-                        </div>
+        if (analysis.matched_scenarios.length > 0) {
+            analysisHTML += `
+                <div style="margin-top: 20px;">
+                    <h4 style="color: #fc00ff;">🎯 识别的问题场景</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                        ${analysis.matched_scenarios.map(scenario => 
+                            `<span style="background: rgba(252,0,255,0.2); padding: 8px 15px; border-radius: 20px; 
+                              border: 1px solid rgba(252,0,255,0.3);">${scenario}</span>`
+                        ).join('')}
                     </div>
                 </div>
             `;
-            genesList.innerHTML += geneHtml;
+        }
+        
+        if (analysis.matched_domains.length > 0) {
+            analysisHTML += `
+                <div style="margin-top: 20px;">
+                    <h4 style="color: #00dbde;">🌐 相关应用领域</h4>
+                    <p>${analysis.matched_domains.join(' → ')}</p>
+                </div>
+            `;
+        }
+        
+        if (result.recommendations && result.recommendations.length > 0) {
+            analysisHTML += `
+                <div style="margin-top: 20px; background: rgba(0,219,222,0.1); padding: 15px; border-radius: 10px;">
+                    <h4 style="color: #00ff7f;">💡 系统建议</h4>
+                    <ul style="margin: 10px 0 0 20px;">
+                        ${result.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        
+        document.getElementById('analysisContent').innerHTML = analysisHTML;
+    }
+    
+    // ==================== 渲染方法基因 ====================
+    function renderGenes(result) {
+        if (!result.data || result.data.length === 0) {
+            document.getElementById('genesSection').innerHTML = `
+                <div style="text-align: center; padding: 30px; color: #ff6b6b;">
+                    <h4>⚠️ 未找到高相关方法基因</h4>
+                    <p>建议调整描述或探索通用方法论</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let genesHTML = `
+            <div style="color: #00ff7f; margin-bottom: 15px;">
+                ✅ 为您精准匹配 ${result.data.length} 个方法基因
+            </div>
+        `;
+        
+        result.data.forEach((gene, index) => {
+            const isPrimary = index === 0;
+            
+            genesHTML += `
+                <div class="gene-card" ${isPrimary ? 'style="border-left: 4px solid #fc00ff;"' : ''}>
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h4 style="margin: 0; color: ${isPrimary ? '#fc00ff' : '#00dbde'}">
+                                ${isPrimary ? '⭐ ' : ''}${gene.title}
+                            </h4>
+                            <p style="opacity: 0.8; margin: 5px 0; font-size: 0.9rem;">
+                                来源: ${gene.origin_domain} | 复杂度: ${'★'.repeat(gene.complexity_level)}
+                            </p>
+                        </div>
+                        <button class="arm-button" style="padding: 5px 15px; font-size: 0.8rem;" 
+                                onclick="focusGene(${gene.id})">
+                            深度应用
+                        </button>
+                    </div>
+                    
+                    <p style="margin: 15px 0; line-height: 1.6;">${gene.description}</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00dbde;">标签:</strong>
+                        <div style="margin-top: 8px;">
+                            ${gene.tags.map(tag => `<span class="gene-tag">#${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; font-size: 0.9rem;">
+                        <strong style="color: #00ff7f;">🚀 可应用于:</strong>
+                        <p style="margin: 5px 0;">${gene.applicable_domains.join(' · ')}</p>
+                    </div>
+                    
+                    ${gene.problem_scenarios ? `
+                    <div style="margin-top: 15px; font-size: 0.85rem; opacity: 0.9;">
+                        <strong>💡 解决场景:</strong>
+                        <p style="margin: 5px 0;">${gene.problem_scenarios.join('、')}</p>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
         });
         
-        document.getElementById('genesContainer').style.display = 'block';
+        document.getElementById('genesSection').innerHTML = genesHTML;
     }
-
-    // ==================== 基于基因生成三头方案 ====================
-    function generateThreeHeadsFromGenes(input, genes) {
-        // 提取关键词
-        const keywords = genes.map(g => g.title).join('、');
-        const domains = [...new Set(genes.flatMap(g => g.applicable_domains))].slice(0, 3);
+    
+    // ==================== 生成三头六臂方案 ====================
+    function renderThreeHeadsSixArms(result) {
+        const genes = result.data;
+        const analysis = result.analysis;
         
-        // 文学头 - 基于叙事类基因
-        const literatureGenes = genes.filter(g => 
-            g.tags.some(tag => ['叙事', '结构', '原型', '隐喻'].includes(tag))
+        if (genes.length === 0) return;
+        
+        // 文学头 - 基于叙事相关基因
+        const narrativeGenes = genes.filter(g => 
+            g.tags.some(t => ['叙事', '结构', '原型', '故事', '悬念'].includes(t))
         );
-        document.getElementById('literature').innerHTML = literatureGenes.length > 0 
-            ? `基于基因「${literatureGenes[0].title}」，创作一部融合传统与现代的叙事作品。核心：${literatureGenes[0].description.substring(0, 80)}...`
-            : `基于"${input.substring(0, 30)}..."，创作一部探讨专业价值的文学作品，融合${keywords}等元素。`;
+        document.getElementById('literatureHead').innerHTML = narrativeGenes.length > 0 ?
+            `应用<b>${narrativeGenes[0].title}</b>基因，构建${analysis.matched_domains[0] || '专业'}领域的叙事框架，重点解决${analysis.matched_scenarios[0] || '核心问题'}` :
+            `基于您的${analysis.matched_domains[0] || '专业'}背景，设计创新叙事结构`;
         
-        // 音乐头 - 基于节奏类基因
-        const musicGenes = genes.filter(g => 
-            g.tags.some(tag => ['节奏', '情绪', '结构', '对比'].includes(tag))
+        // 音乐头 - 基于节奏相关基因
+        const rhythmGenes = genes.filter(g => 
+            g.tags.some(t => ['节奏', '情绪', '对比', '循环', '结构'].includes(t))
         );
-        document.getElementById('music').innerHTML = musicGenes.length > 0
-            ? `应用「${musicGenes[0].title}」基因，设计具有${musicGenes[0].tags.join('、')}特征的声音体验，适用于${domains[0] || '多场景'}。`
-            : `将您的专业韵律转化为${domains[0] || '跨界'}领域的节奏设计，创造独特的情绪曲线。`;
+        document.getElementById('musicHead').innerHTML = rhythmGenes.length > 0 ?
+            `运用<b>${rhythmGenes[0].title}</b>原理，规划项目节奏与情绪曲线，适配${genes[0].applicable_domains[0] || '目标'}领域的传播需求` :
+            `设计具有${analysis.matched_tags[0] || '独特'}节奏的专业表达方案`;
         
-        // 影视头 - 基于视觉类基因
-        const filmGenes = genes.filter(g => 
-            g.tags.some(tag => ['视觉', '空间', '意象', '构图'].includes(tag))
+        // 影视头 - 基于视觉相关基因
+        const visualGenes = genes.filter(g => 
+            g.tags.some(t => ['视觉', '空间', '意象', '构图', '引导'].includes(t))
         );
-        document.getElementById('film').innerHTML = filmGenes.length > 0
-            ? `运用「${filmGenes[0].title}」手法，制作系列视觉内容，重点展现：${filmGenes[0].description.substring(0, 100)}...`
-            : `拍摄${domains[1] || '专业'}主题的视觉叙事作品，解构核心概念，适合数字媒体传播。`;
+        document.getElementById('filmHead').innerHTML = visualGenes.length > 0 ?
+            `采用<b>${visualGenes[0].title}</b>手法，创建${genes.length}套视觉表达方案，增强${analysis.matched_domains[1] || '专业'}影响力` :
+            `策划跨媒体视觉叙事，放大您的${analysis.matched_domains[0] || '核心'}价值`;
         
-        // 六臂执行
-        const executionSteps = [
-            `诊断: 识别出${genes.length}个核心方法基因`,
-            `嫁接: 匹配到${domains.join('、')}领域`,
-            `架构: 设计${genes.length * 2}周实施路线`,
-            `物料: 生成文案、视觉、方案模板`,
-            `变现: 制定${genes.length * 3}-${genes.length * 8}万报价范围`,
-            `协同: 推荐${genes.length * 2}个资源渠道`
+        // 六臂执行详情
+        const armDetails = [
+            `诊断: 深度解构${genes.length}个核心方法基因`,
+            `嫁接: 移植到${analysis.matched_domains.slice(0,3).join('、')}领域`,
+            `架构: ${genes.length * 4}周实施路线图`,
+            `物料: ${genes.length * 3}套专业模板`,
+            `变现: ${genes.reduce((sum, g) => sum + g.complexity_level, 0) * 2}-${genes.reduce((sum, g) => sum + g.complexity_level, 0) * 5}万报价区间`,
+            `协同: ${genes.length * 2}个资源渠道推荐`
         ];
-        document.getElementById('execution').innerHTML = executionSteps.join(' · ');
-    }
-
-    // ==================== 降级方案（无网络时） ====================
-    function generateFallback(input) {
-        document.getElementById('literature').innerHTML = 
-            `基于"${input.substring(0, 30)}..."，创作一部探讨传统与现代融合的中篇小说，重点展现技艺传承的现代表达。`;
         
-        document.getElementById('music').innerHTML = 
-            `将您的韵律感和空间感转化为实验音乐作品，融合传统元素与现代电子音效，创造独特的听觉体验。`;
-        
-        document.getElementById('film').innerHTML = 
-            `拍摄系列短视频，用视觉语言解构传统技艺，每集聚焦一个核心概念，适合社交媒体传播。`;
-        
-        document.getElementById('execution').innerHTML = 
-            `1.诊断：解构出3个核心元能力 · 2.嫁接：匹配到品牌设计、体验策划、教育产品3个领域 · 3.架构：设计12周实施路线 · 4.物料：生成文案、视觉、音频素材包 · 5.变现：制定5-20万报价方案 · 6.协同：推荐合作资源与工具`;
-        
-        // 提示用户
-        alert('⚠️ 使用本地模式生成（云端基因库未响应）');
-    }
-
-    // ==================== 商业化功能 ====================
-    const commercial = {
-        generateQuote: function() {
-            const skill = document.getElementById('input')?.value || '专业技能';
-            
-            // 尝试获取匹配的基因来生成更精准的报价
-            const input = document.getElementById('input').value;
-            searchMethodGenes(input, { limit: 1 }).then(genes => {
-                const basePrice = genes.length > 0 ? 8 + genes[0].complexity_level * 2 : 8;
-                
-                const quote = {
-                    项目: skill + '跨界方案',
-                    报价: `${basePrice}-${basePrice * 3}万元`,
-                    周期: `${genes.length > 0 ? genes[0].complexity_level : 3}个月`,
-                    交付物: ['方案文档', '实施指导', '培训材料', '售后支持'],
-                    付款方式: '50%预付，50%交付后',
-                    基因支撑: genes.length > 0 ? `基于「${genes[0].title}」方法基因` : '标准方案',
-                    有效期: '30天'
-                };
-                
-                document.getElementById('quoteContent').innerHTML = `
-                    <p><strong>项目:</strong> ${quote.项目}</p>
-                    <p><strong>报价:</strong> ${quote.报价}</p>
-                    <p><strong>周期:</strong> ${quote.周期}</p>
-                    <p><strong>交付物:</strong> ${quote.交付物.join(', ')}</p>
-                    <p><strong>方法支撑:</strong> ${quote.基因支撑}</p>
-                    <p><strong>付款方式:</strong> ${quote.付款方式}</p>
-                `;
-                document.getElementById('quoteResult').style.display = 'block';
-            });
-        },
-        
-        createProposal: function() {
-            const skill = document.getElementById('input')?.value || '您的专业';
-            const proposal = `
-# 商业合作提案
-
-## 项目概述
-基于您的 "${skill}" 能力，提供完整的跨界解决方案。
-
-## 方法基因支撑
-系统已匹配相关方法基因，确保方案的专业性与创新性。
-
-## 服务内容
-1. 市场分析 + 定位策略
-2. 跨界方案设计
-3. 实施路线图
-4. 成果交付 + 优化
-
-## 投资与回报
-- 项目投资: 8-25万元
-- 预计回报: 30-100万元
-- 周期: 3-6个月
-- ROI: 300-500%
-
-## 联系方式
-电话: 400-xxx-xxxx
-邮箱: contact@threeheads.com
-            `;
-            
-            alert('提案已生成！请复制以下内容：\n\n' + proposal);
-        },
-        
-        showPayment: function() {
-            const methods = [
-                { name: '支付宝', rate: '0.6%', min: 100 },
-                { name: '微信支付', rate: '0.6%', min: 100 },
-                { name: '银行卡', rate: '1.5%', min: 1000 },
-                { name: 'PayPal', rate: '3.4%', min: 10 }
-            ];
-            
-            let html = '<h4>支付方式</h4>';
-            methods.forEach(m => {
-                html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid rgba(255,255,255,0.2);">
-                    <strong>${m.name}</strong><br>
-                    费率: ${m.rate} | 最低: ${m.min}元
-                </div>`;
-            });
-            
-            document.getElementById('quoteContent').innerHTML = html;
-            document.getElementById('quoteResult').style.display = 'block';
-        }
-    };
-
-    // ==================== 页面初始化 ====================
-    document.addEventListener('DOMContentLoaded', function() {
-        // 在生成结果后显示商业化工具
-        const resultsDiv = document.getElementById('results');
-        if (resultsDiv) {
-            resultsDiv.insertAdjacentHTML('afterend', `
-                <div style="text-align: center; margin: 30px 0;">
-                    <button onclick="showCommercialTools()" style="
-                        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                        color: white;
-                        padding: 12px 30px;
-                        border: none;
-                        border-radius: 25px;
-                        font-size: 16px;
-                        cursor: pointer;
-                    ">
-                        🚀 转化为商业项目
+        document.getElementById('executionDetails').innerHTML = `
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                <h4 style="color: #00dbde;">📋 详细执行方案</h4>
+                <ul style="margin: 15px 0 0 20px; line-height: 1.8;">
+                    ${armDetails.map(detail => `<li>${detail}</li>`).join('')}
+                </ul>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="arm-button" onclick="exportPlan()">
+                        📥 导出完整方案文档
                     </button>
                 </div>
-            `);
-        }
-    });
-
-    function showCommercialTools() {
-        document.getElementById('commercialPanel').style.display = 'block';
-        document.getElementById('commercialPanel').scrollIntoView({ behavior: 'smooth' });
+            </div>
+        `;
     }
-
-    // ==================== 暴露函数到全局 ====================
-    window.generateQuote = commercial.generateQuote;
-    window.createProposal = commercial.createProposal;
-    window.showPayment = commercial.showPayment;
-    window.calculateROI = function() {
-        alert('ROI计算器：\n\n输入项目投资与预期回报，系统将自动计算投资回报率。\n\n（此功能需结合具体项目数据）');
-    };
-    window.downloadQuote = function() {
-        alert('PDF下载功能需配置服务器端生成。\n\n当前可复制报价单内容手动创建文档。');
-    };
+    
+    // ==================== 六臂功能 ====================
+    function armFunction(armType) {
+        if (!currentGenes || currentGenes.length === 0) {
+            alert('请先生成智能分析方案');
+            return;
+        }
+        
+        const armTitles = {
+            diagnose: '诊断臂 - 能力深度解构',
+            graft: '嫁接臂 - 跨界能力移植',
+            architect: '架构臂 - 实施方案设计',
+            material: '物料臂 - 工具模板生成',
+            monetize: '变现臂 - 商业价值实现',
+            collaborate: '协同臂 - 资源网络连接'
+        };
+        
+        const primaryGene = currentGenes[0];
+        
+        alert(`启动【${armTitles[armType]}】\n\n基于方法基因: ${primaryGene.title}\n\n详细功能即将开放，专业版用户可享受完整工作流。`);
+    }
+    
+    // ==================== 商业化功能 ====================
+    function showCommercialPanel() {
+        document.getElementById('commercialPanel').style.display = 'block';
+        document.getElementById('commercialPanel').scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
+    
+    function selectPlan(planType) {
+        const plans = {
+            trial: { name: '体验版', price: 299, desc: '单次深度分析报告' },
+            pro: { name: '专业版', price: 999, desc: '月度无限生成 + 商业工具' },
+            enterprise: { name: '企业版', price: 9999, desc: '年度合伙人 + 定制服务' }
+        };
+        
+        const plan = plans[planType];
+        
+        document.getElementById('commercialOutput').innerHTML = `
+            <div style="background: rgba(0,219,222,0.1); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <h4>🎉 选择 ${plan.name}</h4>
+                <p>价格: <strong style="color: #fc00ff; font-size: 1.2rem;">¥${plan.price}</strong></p>
+                <p>包含: ${plan.desc}</p>
+                <div style="margin-top: 20px;">
+                    <button class="arm-button" onclick="simulatePayment('${planType}')">
+                        💳 模拟支付 (演示)
+                    </button>
+                    <button class="arm-button" onclick="contactSales()" style="background: rgba(255,255,255,0.1);">
+                        📞 联系商务
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    
+    function simulatePayment(planType) {
+        alert(`💰 支付流程演示\n\n您选择了 ${planType} 套餐\n\n真实支付需要集成 Stripe/支付宝 API\n\n当前为演示模式，支付功能暂未激活`);
+    }
+    
+    function generateQuote() {
+        if (!currentGenes || currentGenes.length === 0) {
+            alert('请先生成智能分析方案');
+            return;
+        }
+        
+        const totalComplexity = currentGenes.reduce((sum, g) => sum + g.complexity_level, 0);
+        const basePrice = 5000 + (totalComplexity * 2000);
+        
+        const quoteHTML = `
+            <div style="background: white; color: #333; padding: 25px; border-radius: 10px; margin-top: 20px;">
+                <h3 style="color: #1a1a2e;">📄 专业服务报价单</h3>
+                <div style="margin: 20px 0;">
+                    <p><strong>项目名称:</strong> ${currentAnalysis?.user_input || '专业能力'} 跨界赋能方案</p>
+                    <p><strong>报价总额:</strong> <span style="color: #fc00ff; font-size: 1.5rem;">¥${basePrice.toLocaleString()}</span></p>
+                    <p><strong>服务周期:</strong> ${totalComplexity * 2} 周</p>
+                    <p><strong>核心方法支撑:</strong></p>
+                    <ul>
+                        ${currentGenes.slice(0,3).map(gene => 
+                            `<li>${gene.title} (${gene.origin_domain})</li>`
+                        ).join('')}
+                    </ul>
+                    <p><strong>交付物:</strong></p>
+                    <ul>
+                        <li>完整跨界方案文档</li>
+                        <li>实施路线图</li>
+                        <li>商业提案模板</li>
+                        <li>专业指导咨询</li>
+                    </ul>
+                    <div style="margin-top: 30px; text-align: center;">
+                        <button class="arm-button" onclick="downloadQuote()" 
+                                style="background: #00dbde; color: white;">
+                            📥 下载报价单 (PDF)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('commercialOutput').innerHTML = quoteHTML;
+    }
+    
+    // ==================== 辅助函数 ====================
+    function focusGene(geneId) {
+        const gene = currentGenes.find(g => g.id === geneId);
+        if (gene) {
+            document.getElementById('analysisContent').scrollIntoView({ behavior: 'smooth' });
+            
+            document.getElementById('analysisContent').innerHTML += `
+                <div style="background: rgba(252,0,255,0.1); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h4 style="color: #fc00ff;">🎯 深度聚焦: ${gene.title}</h4>
+                    <p><strong>应用建议:</strong> 将此基因方法系统化应用于您的${currentAnalysis?.matched_domains[0] || '专业'}实践</p>
+                    <p><strong>实施步骤:</strong></p>
+                    <ol style="margin: 10px 0 0 20px;">
+                        <li>解构 ${gene.title} 的核心原理</li>
+                        <li>映射到您现有的工作流程</li>
+                        <li>设计 ${gene.complexity_level * 2} 周实施计划</li>
+                        <li>创建效果评估指标</li>
+                    </ol>
+                </div>
+            `;
+        }
+    }
+    
+    function generateLocalFallback(userInput) {
+        // 本地降级逻辑
+        const fallbackGenes = [
+            {
+                title: "通用创新框架",
+                description: "适用于多领域的结构化创新方法论",
+                origin_domain: "系统通用",
+                tags: ["创新", "框架", "方法论"],
+                applicable_domains: ["通用领域"],
+                complexity_level: 2
+            }
+        ];
+        
+        currentGenes = fallbackGenes;
+        
+        // 简单渲染
+        document.getElementById('literatureHead').textContent = "基于本地知识库生成叙事建议";
+        document.getElementById('musicHead').textContent = "设计通用节奏与结构方案";
+        document.getElementById('filmHead').textContent = "策划基础视觉表达框架";
+        
+        document.getElementById('executionDetails').innerHTML = `
+            <div style="color: #ff6b6b;">
+                <p>⚠️ 当前为本地降级模式，功能受限</p>
+                <p>建议连接到云端智能引擎获得完整功能</p>
+            </div>
+        `;
+    }
+    
+    function exportPlan() {
+        alert('📤 方案导出功能\n\n专业版功能：可导出完整的PDF方案文档，包含详细实施步骤、模板和资源推荐。');
+    }
+    
+    function createProposal() {
+        alert('📋 提案生成功能\n\n根据您的分析结果，自动生成客户提案文档。');
+    }
+    
+    function showContract() {
+        alert('📑 合同模板\n\n提供标准服务合同模板，支持自定义条款。');
+    }
+    
+    function calculateROI() {
+        alert('📊 ROI分析器\n\n计算项目投资回报率，评估商业价值。');
+    }
+    
+    function paymentOptions() {
+        alert('💳 支付设置\n\n配置支付宝、微信支付、银行卡等支付方式。');
+    }
+    
+    function contactSales() {
+        alert('📞 商务联系\n\n联系电话: 400-xxx-xxxx\n商务邮箱: business@threeheads.com');
+    }
+    
+    function downloadQuote() {
+        alert('📥 下载功能\n\nPDF生成需要服务器端支持，当前为演示模式。');
+    }
+    
+    // ==================== 页面初始化 ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 三头六臂创世系统 v2.0 已加载');
+        
+        // 测试API连接
+        setTimeout(() => {
+            fetch('/.netlify/functions/searchGenes?query=测试')
+                .then(() => {
+                    document.getElementById('apiStatus').innerHTML = 
+                        '云端智能引擎 ✓ 在线';
+                    document.getElementById('apiStatus').style.color = '#00ff7f';
+                })
+                .catch(() => {
+                    document.getElementById('apiStatus').innerHTML = 
+                        '智能引擎 ✗ 离线 | 部分功能受限';
+                    document.getElementById('apiStatus').style.color = '#ff6b6b';
+                });
+        }, 1000);
+    });
     </script>
 </body>
 </html>
