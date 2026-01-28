@@ -85,6 +85,35 @@
             font-size: 0.9rem;
             opacity: 0.7;
         }
+        /* 新增样式 */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+        }
+        .gene-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 15px;
+            margin: 2px;
+            font-size: 0.85rem;
+        }
+        .arm-button {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .arm-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -94,7 +123,7 @@
         
         <div>
             <textarea id="input" placeholder="描述您的专业能力，例如：我是一名传统书法家，擅长用笔墨表现气韵与意境..."></textarea>
-            <button onclick="generate()">🚀 生成跨界方案</button>
+            <button onclick="generateWithAI()">🚀 生成跨界方案</button>
         </div>
         
         <div class="results" id="results">
@@ -102,115 +131,260 @@
             
             <div class="card">
                 <h3>📖 文学头 - 叙事构建</h3>
-                <p id="literature">将您的专业转化为文学作品...</p>
+                <p id="literature">正在连接智能基因库...</p>
             </div>
             
             <div class="card">
                 <h3>🎵 音乐头 - 节奏设计</h3>
-                <p id="music">将您的韵律感转化为音乐结构...</p>
+                <p id="music">正在分析节奏模式...</p>
             </div>
             
             <div class="card">
                 <h3>🎬 影视头 - 视觉叙事</h3>
-                <p id="film">将您的表现力转化为影像语言...</p>
+                <p id="film">正在构建视觉框架...</p>
             </div>
             
             <div class="card">
                 <h3>🦾 六臂执行体系</h3>
-                <p id="execution">1.诊断 · 2.嫁接 · 3.架构 · 4.物料 · 5.变现 · 6.协同</p>
+                <p id="execution">正在生成执行方案...</p>
+            </div>
+            
+            <!-- 新增：云端基因展示区域 -->
+            <div class="card" id="genesContainer" style="display:none;">
+                <h3>🧠 智能匹配的方法基因</h3>
+                <div id="genesList"></div>
             </div>
         </div>
         
         <footer>
             <p>© 2024 三头六臂创世系统 | 协议驱动 · 集体进化</p>
-            <p style="font-size: 0.8rem; margin-top: 5px;">GitHub: jinv2/three-heads-six-arms</p>
+            <p style="font-size: 0.8rem; margin-top: 5px;">GitHub: jinv2/three-heads-six-arms | 云端基因库已连接</p>
         </footer>
     </div>
     
+    <!-- 商业化模块 -->
+    <div id="commercialPanel" style="display:none; margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+        <h3>💰 商业化工具</h3>
+        
+        <div class="commercial-tools" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0;">
+            <button class="arm-button" onclick="generateQuote()">生成报价单</button>
+            <button class="arm-button" onclick="createProposal()">创建客户提案</button>
+            <button class="arm-button" onclick="showPayment()">设置支付方式</button>
+            <button class="arm-button" onclick="calculateROI()">ROI计算器</button>
+        </div>
+        
+        <div id="quoteResult" style="margin-top: 20px; display:none;">
+            <h4>报价单预览</h4>
+            <div id="quoteContent"></div>
+            <button class="arm-button" onclick="downloadQuote()">下载PDF</button>
+        </div>
+    </div>
+
     <script>
-        function generate() {
-            const input = document.getElementById('input').value.trim();
-            if (!input) {
-                alert('请输入您的专业能力描述');
-                return;
+    // ==================== 核心API连接函数 ====================
+    async function searchMethodGenes(userInput, options = {}) {
+        try {
+            // 构建查询参数
+            const params = new URLSearchParams({ 
+                query: userInput,
+                ...(options.domain && { domain: options.domain }),
+                ...(options.tag && { tag: options.tag }),
+                limit: options.limit || 5
+            });
+            
+            // 调用云端Netlify Function
+            const response = await fetch(`/.netlify/functions/searchGenes?${params}`);
+            
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status}`);
             }
             
-            // 显示结果
-            document.getElementById('results').style.display = 'block';
+            const result = await response.json();
             
-            // 生成模拟结果
-            document.getElementById('literature').textContent = 
-                `基于"${input.substring(0, 30)}..."，创作一部探讨传统与现代融合的中篇小说，重点展现技艺传承的现代表达。`;
+            if (!result.success) {
+                console.error('API返回错误:', result.error);
+                return [];
+            }
             
-            document.getElementById('music').textContent = 
-                `将您的韵律感和空间感转化为实验音乐作品，融合传统元素与现代电子音效，创造独特的听觉体验。`;
+            return result.data;
             
-            document.getElementById('film').textContent = 
-                `拍摄系列短视频，用视觉语言解构传统技艺，每集聚焦一个核心概念，适合社交媒体传播。`;
-            
-            document.getElementById('execution').textContent = 
-                `1.诊断：解构出3个核心元能力 · 2.嫁接：匹配到品牌设计、体验策划、教育产品3个领域 · 3.架构：设计12周实施路线 · 4.物料：生成文案、视觉、音频素材包 · 5.变现：制定5-20万报价方案 · 6.协同：推荐合作资源与工具`;
-            
-            // 滚动到结果
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        } catch (error) {
+            console.error('搜索方法基因失败:', error);
+            return [];
         }
-    </script>
-</body>
-</html>
+    }
 
-<!-- 商业化模块 -->
-<div id="commercialPanel" style="display:none; margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
-    <h3>💰 商业化工具</h3>
-    
-    <div class="commercial-tools">
-        <button onclick="generateQuote()">生成报价单</button>
-        <button onclick="createProposal()">创建客户提案</button>
-        <button onclick="showPayment()">设置支付方式</button>
-        <button onclick="calculateROI()">ROI计算器</button>
-    </div>
-    
-    <div id="quoteResult" style="margin-top: 20px; display:none;">
-        <h4>报价单预览</h4>
-        <div id="quoteContent"></div>
-        <button onclick="downloadQuote()">下载PDF</button>
-    </div>
-</div>
+    // ==================== 新版生成函数（连接云端） ====================
+    async function generateWithAI() {
+        const input = document.getElementById('input').value.trim();
+        if (!input) {
+            alert('请输入您的专业能力描述');
+            return;
+        }
+        
+        // 显示加载状态
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('literature').innerHTML = '<div class="loading">🔍 正在搜索方法基因库...</div>';
+        document.getElementById('music').innerHTML = '<div class="loading">🎵 分析节奏与情绪模式...</div>';
+        document.getElementById('film').innerHTML = '<div class="loading">🎬 构建视觉叙事框架...</div>';
+        document.getElementById('execution').innerHTML = '<div class="loading">🦾 生成六臂执行方案...</div>';
+        
+        // 隐藏之前的基因展示
+        document.getElementById('genesContainer').style.display = 'none';
+        
+        // 1. 调用云端基因库
+        const methodGenes = await searchMethodGenes(input);
+        
+        if (methodGenes.length === 0) {
+            // 降级方案：使用本地逻辑
+            generateFallback(input);
+            return;
+        }
+        
+        // 2. 展示匹配到的基因
+        displayMatchedGenes(methodGenes);
+        
+        // 3. 基于基因生成三头六臂方案
+        generateThreeHeadsFromGenes(input, methodGenes);
+        
+        // 4. 显示商业化工具
+        setTimeout(() => {
+            showCommercialTools();
+        }, 500);
+        
+        // 滚动到结果
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
 
-<script>
-// 商业化功能
-const commercial = {
-    // 生成报价单
-    generateQuote: function() {
-        const skill = document.getElementById('input')?.value || '专业技能';
-        const domain = '品牌营销';
+    // ==================== 展示匹配的基因 ====================
+    function displayMatchedGenes(genes) {
+        const genesList = document.getElementById('genesList');
+        genesList.innerHTML = '';
         
-        const quote = {
-            项目: skill + '跨界方案',
-            报价: '8-25万元',
-            周期: '3个月',
-            交付物: ['方案文档', '实施指导', '培训材料', '售后支持'],
-            付款方式: '50%预付，50%交付后',
-            有效期: '30天'
-        };
+        genes.forEach(gene => {
+            const geneHtml = `
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                    <strong style="color: #ffd700;">${gene.title}</strong>
+                    <p style="margin: 8px 0; font-size: 0.9rem;">${gene.description}</p>
+                    <div>
+                        <span style="opacity: 0.8;">来源: ${gene.origin_domain}</span>
+                        <div style="margin-top: 8px;">
+                            ${gene.tags.map(tag => `<span class="gene-tag">#${tag}</span>`).join('')}
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <small>可应用于: ${gene.applicable_domains.join(', ')}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            genesList.innerHTML += geneHtml;
+        });
         
-        document.getElementById('quoteContent').innerHTML = `
-            <p><strong>项目:</strong> ${quote.项目}</p>
-            <p><strong>报价:</strong> ${quote.报价}</p>
-            <p><strong>周期:</strong> ${quote.周期}</p>
-            <p><strong>交付物:</strong> ${quote.交付物.join(', ')}</p>
-            <p><strong>付款方式:</strong> ${quote.付款方式}</p>
-        `;
-        document.getElementById('quoteResult').style.display = 'block';
-    },
-    
-    // 创建提案
-    createProposal: function() {
-        const skill = document.getElementById('input')?.value || '您的专业';
-        const proposal = `
+        document.getElementById('genesContainer').style.display = 'block';
+    }
+
+    // ==================== 基于基因生成三头方案 ====================
+    function generateThreeHeadsFromGenes(input, genes) {
+        // 提取关键词
+        const keywords = genes.map(g => g.title).join('、');
+        const domains = [...new Set(genes.flatMap(g => g.applicable_domains))].slice(0, 3);
+        
+        // 文学头 - 基于叙事类基因
+        const literatureGenes = genes.filter(g => 
+            g.tags.some(tag => ['叙事', '结构', '原型', '隐喻'].includes(tag))
+        );
+        document.getElementById('literature').innerHTML = literatureGenes.length > 0 
+            ? `基于基因「${literatureGenes[0].title}」，创作一部融合传统与现代的叙事作品。核心：${literatureGenes[0].description.substring(0, 80)}...`
+            : `基于"${input.substring(0, 30)}..."，创作一部探讨专业价值的文学作品，融合${keywords}等元素。`;
+        
+        // 音乐头 - 基于节奏类基因
+        const musicGenes = genes.filter(g => 
+            g.tags.some(tag => ['节奏', '情绪', '结构', '对比'].includes(tag))
+        );
+        document.getElementById('music').innerHTML = musicGenes.length > 0
+            ? `应用「${musicGenes[0].title}」基因，设计具有${musicGenes[0].tags.join('、')}特征的声音体验，适用于${domains[0] || '多场景'}。`
+            : `将您的专业韵律转化为${domains[0] || '跨界'}领域的节奏设计，创造独特的情绪曲线。`;
+        
+        // 影视头 - 基于视觉类基因
+        const filmGenes = genes.filter(g => 
+            g.tags.some(tag => ['视觉', '空间', '意象', '构图'].includes(tag))
+        );
+        document.getElementById('film').innerHTML = filmGenes.length > 0
+            ? `运用「${filmGenes[0].title}」手法，制作系列视觉内容，重点展现：${filmGenes[0].description.substring(0, 100)}...`
+            : `拍摄${domains[1] || '专业'}主题的视觉叙事作品，解构核心概念，适合数字媒体传播。`;
+        
+        // 六臂执行
+        const executionSteps = [
+            `诊断: 识别出${genes.length}个核心方法基因`,
+            `嫁接: 匹配到${domains.join('、')}领域`,
+            `架构: 设计${genes.length * 2}周实施路线`,
+            `物料: 生成文案、视觉、方案模板`,
+            `变现: 制定${genes.length * 3}-${genes.length * 8}万报价范围`,
+            `协同: 推荐${genes.length * 2}个资源渠道`
+        ];
+        document.getElementById('execution').innerHTML = executionSteps.join(' · ');
+    }
+
+    // ==================== 降级方案（无网络时） ====================
+    function generateFallback(input) {
+        document.getElementById('literature').innerHTML = 
+            `基于"${input.substring(0, 30)}..."，创作一部探讨传统与现代融合的中篇小说，重点展现技艺传承的现代表达。`;
+        
+        document.getElementById('music').innerHTML = 
+            `将您的韵律感和空间感转化为实验音乐作品，融合传统元素与现代电子音效，创造独特的听觉体验。`;
+        
+        document.getElementById('film').innerHTML = 
+            `拍摄系列短视频，用视觉语言解构传统技艺，每集聚焦一个核心概念，适合社交媒体传播。`;
+        
+        document.getElementById('execution').innerHTML = 
+            `1.诊断：解构出3个核心元能力 · 2.嫁接：匹配到品牌设计、体验策划、教育产品3个领域 · 3.架构：设计12周实施路线 · 4.物料：生成文案、视觉、音频素材包 · 5.变现：制定5-20万报价方案 · 6.协同：推荐合作资源与工具`;
+        
+        // 提示用户
+        alert('⚠️ 使用本地模式生成（云端基因库未响应）');
+    }
+
+    // ==================== 商业化功能 ====================
+    const commercial = {
+        generateQuote: function() {
+            const skill = document.getElementById('input')?.value || '专业技能';
+            
+            // 尝试获取匹配的基因来生成更精准的报价
+            const input = document.getElementById('input').value;
+            searchMethodGenes(input, { limit: 1 }).then(genes => {
+                const basePrice = genes.length > 0 ? 8 + genes[0].complexity_level * 2 : 8;
+                
+                const quote = {
+                    项目: skill + '跨界方案',
+                    报价: `${basePrice}-${basePrice * 3}万元`,
+                    周期: `${genes.length > 0 ? genes[0].complexity_level : 3}个月`,
+                    交付物: ['方案文档', '实施指导', '培训材料', '售后支持'],
+                    付款方式: '50%预付，50%交付后',
+                    基因支撑: genes.length > 0 ? `基于「${genes[0].title}」方法基因` : '标准方案',
+                    有效期: '30天'
+                };
+                
+                document.getElementById('quoteContent').innerHTML = `
+                    <p><strong>项目:</strong> ${quote.项目}</p>
+                    <p><strong>报价:</strong> ${quote.报价}</p>
+                    <p><strong>周期:</strong> ${quote.周期}</p>
+                    <p><strong>交付物:</strong> ${quote.交付物.join(', ')}</p>
+                    <p><strong>方法支撑:</strong> ${quote.基因支撑}</p>
+                    <p><strong>付款方式:</strong> ${quote.付款方式}</p>
+                `;
+                document.getElementById('quoteResult').style.display = 'block';
+            });
+        },
+        
+        createProposal: function() {
+            const skill = document.getElementById('input')?.value || '您的专业';
+            const proposal = `
 # 商业合作提案
 
 ## 项目概述
 基于您的 "${skill}" 能力，提供完整的跨界解决方案。
+
+## 方法基因支撑
+系统已匹配相关方法基因，确保方案的专业性与创新性。
 
 ## 服务内容
 1. 市场分析 + 定位策略
@@ -227,64 +401,70 @@ const commercial = {
 ## 联系方式
 电话: 400-xxx-xxxx
 邮箱: contact@threeheads.com
-        `;
+            `;
+            
+            alert('提案已生成！请复制以下内容：\n\n' + proposal);
+        },
         
-        alert('提案已生成！请复制以下内容：\n\n' + proposal);
-    },
-    
-    // 显示支付选项
-    showPayment: function() {
-        const methods = [
-            { name: '支付宝', rate: '0.6%', min: 100 },
-            { name: '微信支付', rate: '0.6%', min: 100 },
-            { name: '银行卡', rate: '1.5%', min: 1000 },
-            { name: 'PayPal', rate: '3.4%', min: 10 }
-        ];
-        
-        let html = '<h4>支付方式</h4>';
-        methods.forEach(m => {
-            html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd;">
-                <strong>${m.name}</strong><br>
-                费率: ${m.rate} | 最低: ${m.min}元
-            </div>`;
-        });
-        
-        document.getElementById('quoteContent').innerHTML = html;
-        document.getElementById('quoteResult').style.display = 'block';
+        showPayment: function() {
+            const methods = [
+                { name: '支付宝', rate: '0.6%', min: 100 },
+                { name: '微信支付', rate: '0.6%', min: 100 },
+                { name: '银行卡', rate: '1.5%', min: 1000 },
+                { name: 'PayPal', rate: '3.4%', min: 10 }
+            ];
+            
+            let html = '<h4>支付方式</h4>';
+            methods.forEach(m => {
+                html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid rgba(255,255,255,0.2);">
+                    <strong>${m.name}</strong><br>
+                    费率: ${m.rate} | 最低: ${m.min}元
+                </div>`;
+            });
+            
+            document.getElementById('quoteContent').innerHTML = html;
+            document.getElementById('quoteResult').style.display = 'block';
+        }
+    };
+
+    // ==================== 页面初始化 ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        // 在生成结果后显示商业化工具
+        const resultsDiv = document.getElementById('results');
+        if (resultsDiv) {
+            resultsDiv.insertAdjacentHTML('afterend', `
+                <div style="text-align: center; margin: 30px 0;">
+                    <button onclick="showCommercialTools()" style="
+                        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                        color: white;
+                        padding: 12px 30px;
+                        border: none;
+                        border-radius: 25px;
+                        font-size: 16px;
+                        cursor: pointer;
+                    ">
+                        🚀 转化为商业项目
+                    </button>
+                </div>
+            `);
+        }
+    });
+
+    function showCommercialTools() {
+        document.getElementById('commercialPanel').style.display = 'block';
+        document.getElementById('commercialPanel').scrollIntoView({ behavior: 'smooth' });
     }
-};
 
-// 在页面显示商业化面板
-document.addEventListener('DOMContentLoaded', function() {
-    // 在生成结果后显示商业化工具
-    const resultsDiv = document.getElementById('results');
-    if (resultsDiv) {
-        resultsDiv.insertAdjacentHTML('afterend', `
-            <div style="text-align: center; margin: 30px 0;">
-                <button onclick="showCommercialTools()" style="
-                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                    color: white;
-                    padding: 12px 30px;
-                    border: none;
-                    border-radius: 25px;
-                    font-size: 16px;
-                    cursor: pointer;
-                ">
-                    🚀 转化为商业项目
-                </button>
-            </div>
-        `);
-    }
-});
-
-function showCommercialTools() {
-    document.getElementById('commercialPanel').style.display = 'block';
-    document.getElementById('commercialPanel').scrollIntoView({ behavior: 'smooth' });
-}
-
-// 暴露函数到全局
-window.generateQuote = commercial.generateQuote;
-window.createProposal = commercial.createProposal;
-window.showPayment = commercial.showPayment;
-</script>
-<button onclick="generate()">生成方案</button>
+    // ==================== 暴露函数到全局 ====================
+    window.generateQuote = commercial.generateQuote;
+    window.createProposal = commercial.createProposal;
+    window.showPayment = commercial.showPayment;
+    window.calculateROI = function() {
+        alert('ROI计算器：\n\n输入项目投资与预期回报，系统将自动计算投资回报率。\n\n（此功能需结合具体项目数据）');
+    };
+    window.downloadQuote = function() {
+        alert('PDF下载功能需配置服务器端生成。\n\n当前可复制报价单内容手动创建文档。');
+    };
+    </script>
+</body>
+</html>
