@@ -157,3 +157,133 @@
     </script>
 </body>
 </html>
+
+<!-- 商业化模块 -->
+<div id="commercialPanel" style="display:none; margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+    <h3>💰 商业化工具</h3>
+    
+    <div class="commercial-tools">
+        <button onclick="generateQuote()">生成报价单</button>
+        <button onclick="createProposal()">创建客户提案</button>
+        <button onclick="showPayment()">设置支付方式</button>
+        <button onclick="calculateROI()">ROI计算器</button>
+    </div>
+    
+    <div id="quoteResult" style="margin-top: 20px; display:none;">
+        <h4>报价单预览</h4>
+        <div id="quoteContent"></div>
+        <button onclick="downloadQuote()">下载PDF</button>
+    </div>
+</div>
+
+<script>
+// 商业化功能
+const commercial = {
+    // 生成报价单
+    generateQuote: function() {
+        const skill = document.getElementById('input')?.value || '专业技能';
+        const domain = '品牌营销';
+        
+        const quote = {
+            项目: skill + '跨界方案',
+            报价: '8-25万元',
+            周期: '3个月',
+            交付物: ['方案文档', '实施指导', '培训材料', '售后支持'],
+            付款方式: '50%预付，50%交付后',
+            有效期: '30天'
+        };
+        
+        document.getElementById('quoteContent').innerHTML = `
+            <p><strong>项目:</strong> ${quote.项目}</p>
+            <p><strong>报价:</strong> ${quote.报价}</p>
+            <p><strong>周期:</strong> ${quote.周期}</p>
+            <p><strong>交付物:</strong> ${quote.交付物.join(', ')}</p>
+            <p><strong>付款方式:</strong> ${quote.付款方式}</p>
+        `;
+        document.getElementById('quoteResult').style.display = 'block';
+    },
+    
+    // 创建提案
+    createProposal: function() {
+        const skill = document.getElementById('input')?.value || '您的专业';
+        const proposal = `
+# 商业合作提案
+
+## 项目概述
+基于您的 "${skill}" 能力，提供完整的跨界解决方案。
+
+## 服务内容
+1. 市场分析 + 定位策略
+2. 跨界方案设计
+3. 实施路线图
+4. 成果交付 + 优化
+
+## 投资与回报
+- 项目投资: 8-25万元
+- 预计回报: 30-100万元
+- 周期: 3-6个月
+- ROI: 300-500%
+
+## 联系方式
+电话: 400-xxx-xxxx
+邮箱: contact@threeheads.com
+        `;
+        
+        alert('提案已生成！请复制以下内容：\n\n' + proposal);
+    },
+    
+    // 显示支付选项
+    showPayment: function() {
+        const methods = [
+            { name: '支付宝', rate: '0.6%', min: 100 },
+            { name: '微信支付', rate: '0.6%', min: 100 },
+            { name: '银行卡', rate: '1.5%', min: 1000 },
+            { name: 'PayPal', rate: '3.4%', min: 10 }
+        ];
+        
+        let html = '<h4>支付方式</h4>';
+        methods.forEach(m => {
+            html += `<div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd;">
+                <strong>${m.name}</strong><br>
+                费率: ${m.rate} | 最低: ${m.min}元
+            </div>`;
+        });
+        
+        document.getElementById('quoteContent').innerHTML = html;
+        document.getElementById('quoteResult').style.display = 'block';
+    }
+};
+
+// 在页面显示商业化面板
+document.addEventListener('DOMContentLoaded', function() {
+    // 在生成结果后显示商业化工具
+    const resultsDiv = document.getElementById('results');
+    if (resultsDiv) {
+        resultsDiv.insertAdjacentHTML('afterend', `
+            <div style="text-align: center; margin: 30px 0;">
+                <button onclick="showCommercialTools()" style="
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                    color: white;
+                    padding: 12px 30px;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 16px;
+                    cursor: pointer;
+                ">
+                    🚀 转化为商业项目
+                </button>
+            </div>
+        `);
+    }
+});
+
+function showCommercialTools() {
+    document.getElementById('commercialPanel').style.display = 'block';
+    document.getElementById('commercialPanel').scrollIntoView({ behavior: 'smooth' });
+}
+
+// 暴露函数到全局
+window.generateQuote = commercial.generateQuote;
+window.createProposal = commercial.createProposal;
+window.showPayment = commercial.showPayment;
+</script>
